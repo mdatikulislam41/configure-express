@@ -43,6 +43,12 @@ const loginController = async (req, res) => {
       const token = jwt.sign(loggedUser, process.env.JWT_SECRET, {
         expiresIn: "10m",
       });
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: true, // production এ true
+        sameSite: "strict",
+        maxAge: 15 * 60 * 1000,
+      });
       res.status(200).json({
         success: true,
         message: "Login successful",
@@ -53,7 +59,20 @@ const loginController = async (req, res) => {
     res.status(505).json({ message: error.message });
   }
 };
+const logoutController = async (req, res) => {
+  try {
+    res.clearCookie("token");
+    res.status(202).json({ message: "success" }); //response na korle cookie kaj kore na
+  } catch (err) {
+    res.status(505).json({ message: err.message });
+  }
+};
 const profileController = async (req, res) => {
   res.status(202).json({ message: "success", info: req.user });
 };
-module.exports = { registerController, loginController, profileController };
+module.exports = {
+  registerController,
+  loginController,
+  profileController,
+  logoutController,
+};
