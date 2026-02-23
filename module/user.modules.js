@@ -1,5 +1,10 @@
 const { Schema, model } = require("mongoose");
 const bcrypt = require("bcrypt");
+const refreshTokenSchema = Schema({
+  token: String,
+  device: String,
+  createdAt: { type: Date, default: Date.now },
+});
 const userSchema = Schema(
   {
     username: {
@@ -18,8 +23,8 @@ const userSchema = Schema(
     },
     password: {
       type: String,
-      minLength: [5, "minimum length 5"],
-      maxLength: [15, "maximum length 8"],
+      // minLength: [1, "minimum length 5"],
+      // maxLength: [20, "maximum length 8"],
     },
     date: {
       type: Date,
@@ -27,8 +32,11 @@ const userSchema = Schema(
     },
     role: {
       type: String,
-      default: "customer",
+      enum: ["user", "admin"],
+      default: "user",
     },
+    tokenVersion: { type: Number, default: 0 },
+    refreshTokens: [refreshTokenSchema],
   },
   { versionKey: false },
 );

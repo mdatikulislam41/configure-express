@@ -18,8 +18,8 @@ const startServer = async () => {
     });
   };
   // When app is terminated (Ctrl+C)
-  process.on("SIGINT", gracefulShutdown);
-  // When hosting provider stops app
-  process.on("SIGTERM", gracefulShutdown);
+  // process.on("SIGINT", gracefulShutdown);
+  // // When hosting provider stops app
+  // process.on("SIGTERM", gracefulShutdown);
 };
 startServer();
